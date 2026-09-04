@@ -26,11 +26,14 @@
 #print("Followers: " + str(followers))
 
 username = input("Enter your username: ")
-age = (input("Enter your age: "))
+age = int(input("Enter your age: "))
 category = input("Enter your category: ")
 
 print("\n Instagram Profile: ")
 print("=====================")
 print("Username: " + username)
-print("Age: " + age)
+print("Age: " + str(age))
 print("Category: " + category)
+
+if(age >40 and category == "Fun"):
+    print("You are old what is fun for u ")
