@@ -34,15 +34,31 @@ def calculate_tax_amount(amount):
     tax_amount = amount * tax_rate
     return tax_amount
 
-def calculate_inventory_id(dictionary,starting_id):
-    if not dictionary:
-        return "N/A"
-    else:
-        st = starting_id.spilt("ID")
+def open_inventory():
+    orders =[]
+    try:
+        file = open("Orders.txt",'r')
+        file.close()
+    except:
+        file = open("Orders.txt",'w+')
+        file.close()
+    finally:
+        with open("Orders.txt",'r') as file:
+            orders = file.readlines()
+            file.close()
+    return orders
+
+def openreport(inventorylist:list):
+    print("Current Orders \n")
+    if not inventorylist:
+        print("There is nothing inside the list ")
+    for i in inventorylist:
+        print(f'{i} \n')
+
 
 def main():
-    Inventorydictionary = {}
-    startingid = "ID000"
+    inventory = open_inventory()
+    openreport(inventory)
     current_inventory_value = 0
     rejectnum = 0
     continue_audit = True
@@ -65,11 +81,6 @@ def main():
                 continue_audit = False
             if errormessage == "invalid":
                 rejectnum += 1
-            Inventorydictionary[startingid] = {
-                "value": inputvalue,
-                "tax": taxamount
-            }
-            calculate_inventory_id(Inventorydictionary)
             print(f"Current inventory value: {current_inventory_value}")
             print(f"Tax amount for this transaction: ${taxamount:.2f}")
 main()
