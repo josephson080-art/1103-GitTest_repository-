@@ -47,12 +47,14 @@ def input_checker(input_value):
     else:
         return "Valid", input_value
 
-def get_valid_input_ProductId(product_id, inventorydict):
-    while  re.match(r"P\d{3}|p\d{3}",product_id)== None or product_id in inventorydict:
+def get_valid_input_ProductId(product_id, inventorydict,typeofinput ):
+    while  re.match(r"P\d{3}|p\d{3}",product_id)== None  or (product_id in inventorydict and typeofinput == "add") or (product_id not in inventorydict and typeofinput == "update"):
                 if re.match(r"P\d{3}|p\d{3}",product_id) == None:
                     print("Invalid product ID. Please enter a valid product ID (P followed by 3 digits).")
-                if product_id in inventorydict:
+                if product_id in inventorydict and typeofinput == "add":
                     print("Product ID already exists. Please enter a unique product ID.")
+                if product_id not in inventorydict and typeofinput == "update":
+                    print("Product ID not found. Please enter an existing product ID.")
                 product_id = input ("Enter product ID: ")
     return product_id
 
@@ -89,7 +91,7 @@ def add_product(inventorydict):
     looper = True
     print("=== Add Product ===")
     while looper:
-        product_id = get_valid_input_ProductId(input("Enter product ID: "), inventorydict)
+        product_id = get_valid_input_ProductId(input("Enter product ID: "), inventorydict, "add")
         product_name = input("Enter product name: ")
         product_price = get_valid_input_ProductPrice(input("Enter product price: "))
         product_quantity = get_valid_input_ProductQuantity(input("Enter product quantity: "))
@@ -102,6 +104,23 @@ def display_all(inventorydict):
     for i in inventorydict:
         print(f"Product ID: {i}, Name: {inventorydict[i]['Name']}, Price: {inventorydict[i]['Price']}, Quantity: {inventorydict[i]['Quantity']}")
     print("--------------------------------")
+
+
+def search_product(inventorydict, product_id):
+    if product_id in inventorydict:
+        return inventorydict[product_id]
+    else:
+        print(f"Product ID {product_id} not found in inventory.")
+        return None
+
+def product_found_template(product_value):
+    print("Product Found:")
+    print(f"Name: {product_value['Name']} \n Current Stock : {product_value['Quantity']} \n")
+
+def product_update(stock_quantity, product_value):
+    product_value['Quantity'] = stock_quantity
+    if product_value['Quantity'] == stock_quantity:
+        print("Stock updated successfully.")
 
 def main():
     menu(1)
@@ -119,6 +138,14 @@ def main():
                 inventory[product_id] = product_value
                 if product_id in inventory:
                     print(f"Product {product_id} added successfully.")
+            elif inputvalue == 3:
+                print("=== Update Stock ===")
+                product_id = get_valid_input_ProductId(input("Enter product ID to update: "), inventory, "update")
+                product = search_product(inventory, product_id)
+                if product is not None:
+                    product_found_template(product)
+                    new_quantity = get_valid_input_ProductQuantity(input("New Stock Quantity: "))
+                    product_update(new_quantity, product)
             elif inputvalue == 6:
                 save_inventory(inventory)
                 print("Inventory saved successfully. Exiting the program.")
