@@ -15,7 +15,11 @@ def menu(menunumber):
         print("5.Save Inventory")
         print("6. Exit")
 
-def save_inventory(inventorydict):
+def save_inventory(inventorydict,typeofinput):
+    if typeofinput == "save":
+        print("Saving inventory to file...")
+    if typeofinput == "exit":
+        print("Saving Files before exiting...")
     with open("inventory.json", "w") as file:
         json.dump(inventorydict, file)
 
@@ -157,9 +161,14 @@ def main():
                 product = search_product(inventory, product_id)
                 if product is not None:
                     product_found_template(product, "search", product_id)
+            elif inputvalue == 5:
+                save_inventory(inventory, "save")
+                print("Inventory saved successfully.")
             elif inputvalue == 6:
-                save_inventory(inventory)
+                save_inventory(inventory, "exit")
                 print("Inventory saved successfully. Exiting the program.")
+                print("Thank you for using the Inventory Management System. Goodbye!")
+                print("Program terminated")
                 loophandler = False
         elif inputstatus == "Invalid":
             print("Invalid input. Please try again.")
