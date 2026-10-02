@@ -113,9 +113,14 @@ def search_product(inventorydict, product_id):
         print(f"Product ID {product_id} not found in inventory.")
         return None
 
-def product_found_template(product_value):
+def product_found_template(product_value,typeofinput,product_id = None):
     print("Product Found:")
-    print(f"Name: {product_value['Name']} \n Current Stock : {product_value['Quantity']} \n")
+    if typeofinput == "update":
+        print(f"Name: {product_value['Name']} \n Current Stock : {product_value['Quantity']} \n")
+    if typeofinput == "search":
+        print("-------------------------------")
+        print(f"Product ID: {product_id} \nProduct Name: {product_value['Name']} \nPrice: {product_value['Price']} \nCurrent Stock : {product_value['Quantity']} \n")
+        print("-------------------------------")
 
 def product_update(stock_quantity, product_value):
     product_value['Quantity'] = stock_quantity
@@ -143,9 +148,15 @@ def main():
                 product_id = get_valid_input_ProductId(input("Enter product ID to update: "), inventory, "update")
                 product = search_product(inventory, product_id)
                 if product is not None:
-                    product_found_template(product)
+                    product_found_template(product, "update")
                     new_quantity = get_valid_input_ProductQuantity(input("New Stock Quantity: "))
                     product_update(new_quantity, product)
+            elif inputvalue == 4:
+                print("=== Search Product ===")
+                product_id = get_valid_input_ProductId(input("Enter product ID to search: "), inventory, "update")
+                product = search_product(inventory, product_id)
+                if product is not None:
+                    product_found_template(product, "search", product_id)
             elif inputvalue == 6:
                 save_inventory(inventory)
                 print("Inventory saved successfully. Exiting the program.")
