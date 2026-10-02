@@ -100,7 +100,7 @@ def display_all(inventorydict):
     print("-----Current Inventory--------")
     print("--------------------------------")
     for i in inventorydict:
-        print(f"Product ID: {i}, Name: {inventorydict[i]['Name']}, Price: {inventorydict[i]['Price']}, Quantity: {inventorydict[i]['Quantity']} \n")
+        print(f"Product ID: {i}, Name: {inventorydict[i]['Name']}, Price: {inventorydict[i]['Price']}, Quantity: {inventorydict[i]['Quantity']}")
     print("--------------------------------")
 
 def main():
@@ -113,7 +113,7 @@ def main():
         inputstatus , inputvalue = input_checker(inputmenu)
         if inputstatus == "Valid":
             if inputvalue == 1:
-                print("temp")
+                display_all(inventory)
             elif inputvalue == 2:
                 product_id, product_value = add_product(inventory)
                 inventory[product_id] = product_value
